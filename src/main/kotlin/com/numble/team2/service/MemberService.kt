@@ -8,6 +8,7 @@ import com.numble.team2.repository.MemberRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.IllegalArgumentException
+import java.util.stream.Collectors
 
 @Service
 class MemberService(
@@ -34,5 +35,13 @@ class MemberService(
                 MemberFriendEntity(memberId = memberId, friendId = dto.friendId)
             memberEntity.friends.add(memberFriendEntity)
         }
+    }
+
+    @Transactional(readOnly = true)
+    fun getAllFriends(memberId: Long): List<Long> {
+        val memberEntity = memberRepository.findMemberWithAllFriends(memberId)
+            .orElseThrow { throw IllegalArgumentException("해당 ID의 유저가 없습니다. [${memberId}]") }
+        return memberEntity.friends.stream().map { entity -> entity.friendId }
+            .collect(Collectors.toList())
     }
 }
