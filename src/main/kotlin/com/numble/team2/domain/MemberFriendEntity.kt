@@ -9,5 +9,6 @@ class MemberFriendEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
     var memberId: Long,
-    var friendId: Long
+    var friendId: Long,
+    val friendEmail: String
 )

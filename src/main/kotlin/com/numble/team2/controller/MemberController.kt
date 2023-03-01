@@ -1,5 +1,6 @@
 package com.numble.team2.controller
 
+import com.numble.team2.dto.FriendsResponse
 import com.numble.team2.dto.MemberFriendRequest
 import com.numble.team2.dto.SignUpRequest
 import com.numble.team2.service.MemberService
@@ -31,7 +32,7 @@ class MemberController(
 
     @GetMapping("/{memberId}/friends")
     @ResponseStatus(code = HttpStatus.OK)
-    fun getAllMemberFriends(@PathVariable memberId: Long): List<Long> {
+    fun getAllMemberFriends(@PathVariable memberId: Long): List<FriendsResponse> {
         return memberService.getAllFriends(memberId)
     }
 }
