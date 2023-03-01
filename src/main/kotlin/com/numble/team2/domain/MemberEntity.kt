@@ -11,7 +11,9 @@ class MemberEntity(
     email: String,
     password: String,
     @OneToMany(mappedBy = "memberId", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    var friends: MutableList<MemberFriendEntity> = mutableListOf()
+    var friends: MutableList<MemberFriendEntity> = mutableListOf(),
+    @OneToMany(mappedBy = "ownerId", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    var accounts: MutableList<AccountEntity> = mutableListOf()
 ) {
     @Column(unique = true)
     var email: String = email

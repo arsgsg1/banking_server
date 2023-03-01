@@ -19,7 +19,7 @@ class MemberController(
 ) {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    fun SignUp(@RequestBody dto: SignUpRequest) {
+    fun signUp(@RequestBody dto: SignUpRequest) {
         memberService.createMember(dto)
     }
 
