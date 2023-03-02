@@ -26,6 +26,7 @@ class NotificationService(
     }
 
     suspend fun sendNotification(event: NotificationEvent) {
+        // 여기에 외부 알람 서버를 호출하는 코드가 들어갑니다
         logger.info("${event.fromMemberId}번 유저가 ${event.toMemberId}번 유저에게 ${event.money}원을 송금했습니다.")
     }
 }

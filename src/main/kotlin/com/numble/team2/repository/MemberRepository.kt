@@ -8,8 +8,8 @@ import java.util.*
 
 @Repository
 interface MemberRepository: JpaRepository<MemberEntity, Long> {
-    fun findByEmail(email: String): Optional<MemberEntity>
+    fun findByEmail(email: String): MemberEntity?
 
     @Query("SELECT m FROM MemberEntity m LEFT JOIN FETCH m.friends f WHERE m.id = :memberId")
-    fun findMemberWithAllFriends(memberId: Long): Optional<MemberEntity>
+    fun findMemberWithAllFriends(memberId: Long): MemberEntity?
 }

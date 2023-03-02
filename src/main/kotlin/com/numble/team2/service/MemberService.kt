@@ -19,13 +19,11 @@ class MemberService(
     private val memberRepository: MemberRepository,
 ) {
     @Transactional(readOnly = true)
-    fun isNotDuplicateEmail(email: String): Boolean {
-        return !memberRepository.findByEmail(email).isPresent
-    }
+    fun isNotDuplicateEmail(email: String): Boolean = memberRepository.findByEmail(email) == null
 
     @Transactional
     fun createMember(dto: SignUpRequest): Long {
-        require(isNotDuplicateEmail(dto.email)) { "이미 존재하는 이메일입니다." }
+        require(isNotDuplicateEmail(dto.email)) { throw DomainException("이미 존재하는 이메일입니다.") }
         val memberEntity = MemberEntity(email = dto.email, password = dto.password)
         return memberRepository.save(memberEntity).id
     }
@@ -34,25 +32,29 @@ class MemberService(
     fun createFriend(memberId: Long, dto: MemberFriendRequest) {
         checkSelfCreateFriend(memberId, dto.friendId)
         val memberEntity = memberRepository.findMemberWithAllFriends(memberId)
-            .orElseThrow { throw IllegalArgumentException("해당 ID의 유저가 없습니다. [${memberId}]") }
+            ?: throw IllegalArgumentException("해당 ID의 유저가 없습니다. [${memberId}]")
 
-        val friendEntity = memberRepository.findByIdOrNull(dto.friendId) ?: throw MemberNotFoundException(dto.friendId)
+        val friendEntity = memberRepository.findByIdOrNull(dto.friendId)
+            ?: throw MemberNotFoundException(dto.friendId)
 
         memberEntity.friends.firstOrNull { entity -> entity.friendId == dto.friendId } ?: run {
-            memberEntity.friends.add(MemberFriendEntity(memberId = memberId, friendId = friendEntity.id, friendEmail = friendEntity.email))
+            memberEntity.friends.add(
+                MemberFriendEntity(
+                    memberId = memberId,
+                    friendId = friendEntity.id,
+                    friendEmail = friendEntity.email
+                )
+            )
         }
     }
 
     @Transactional(readOnly = true)
     fun getAllFriends(memberId: Long): List<FriendsResponse> {
         val memberEntity = memberRepository.findMemberWithAllFriends(memberId)
-            .orElseThrow { throw MemberNotFoundException(memberId) }
+            ?: throw MemberNotFoundException(memberId)
         return memberEntity.friends.map { entity -> FriendsResponse.fromEntity(entity) }
     }
 
-    private fun checkSelfCreateFriend(memberId: Long, friendId: Long) {
-        if(memberId == friendId) {
-            throw DomainException("자기 자신은 친구 추가를 할 수 없습니다.")
-        }
-    }
+    private fun checkSelfCreateFriend(memberId: Long, friendId: Long) =
+        require(memberId == friendId) { throw DomainException("자기 자신은 친구 추가를 할 수 없습니다.") }
 }

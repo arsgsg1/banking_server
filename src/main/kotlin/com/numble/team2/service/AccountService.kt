@@ -24,12 +24,12 @@ class AccountService(
 
         fromAccount.outcome(dto.money)
         toAccount.income(dto.money)
+        logger.info("${dto.fromUserId} 번 유저가 $toAccountId 번 계좌에 ${dto.money} 원을 이체함")
 
         eventPublisher.publishEvent(
             NotificationEvent(
                 fromMemberId = fromAccount.ownerId,
                 toMemberId = toAccount.ownerId,
                 money = dto.money))
-        logger.info("${dto.fromUserId} 번 유저가 $toAccountId 번 계좌에 ${dto.money} 원을 이체함")
     }
 }
