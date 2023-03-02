@@ -1,4 +1,4 @@
-package com.numble.team2
+package com.numble.team2.account
 
 import com.numble.team2.domain.AccountEntity
 import com.numble.team2.dto.SendMoneyRequest
@@ -15,7 +15,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
-class AccountServiceTest @Autowired constructor(
+class AccountServiceIntegrationTest @Autowired constructor(
 	val accountService: AccountService,
 	val accountRepository: AccountRepository
 ) {
@@ -24,7 +24,7 @@ class AccountServiceTest @Autowired constructor(
 	@Nested
 	inner class T1 {
 		@Test
-		fun `잔액이 1000원인 1명에게 100명이 10원씩 계좌이체하면 잔액이 2000원이 된다`() {
+		fun `잔액이 1000원인 1명에게 100명이 10원씩 동시에 송금하면 잔액이 2000원이 된다`() {
 			val money = 10L
 			var successCount = AtomicInteger()
 			var numberOfExecute = 100

@@ -20,15 +20,16 @@ class AccountEntity(
     fun income(money: Long) {
         balance += money
     }
-    fun outcome(money: Long) {
-        if(balance - money < 0) {
+
+    fun outcome(money: Long) =
+        if (balance - money < 0) {
             throw NotEnoughBalanceException()
+        } else {
+            balance -= money
         }
-        balance -= money
-    }
 
     fun checkOwnerBy(userId: Long) {
-        if(userId != ownerId) {
+        if (userId != ownerId) {
             throw AccountAuthorizedException(userId)
         }
     }
