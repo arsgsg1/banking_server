@@ -1,3 +1,50 @@
+## API 명세
+```
+계좌 목록 조회
+GET /accounts
+
+response
+[{
+  "accountId": 1,
+  "money": 1000
+}]
+
+계좌 이체
+PATCH /accounts/{accountId}
+
+request
+{
+  "fromUserId": 1, //송금자의 회원 ID
+  "fromAccountId": 3, //송금자의 계좌 ID
+  "money": 1000 //송금 금액
+}
+
+response
+"이체가 완료되었습니다"
+
+회원가입
+POST /members
+{
+  "email": "test@naver.com",
+  "password": "12314"
+}
+
+친구 추가
+POST /members/{memberId}/friends
+
+reqeust
+{
+  "friendId": 1 //친구 추가할 대상 ID
+}
+
+GET /members/{memberId}/friends
+
+response
+{
+  "id": 1, //친구 ID
+  "email": "test@naver.com" //친구 이메일
+}
+```
 ## ERD
 ![스크린샷 2023-03-02 오후 8 39 39](https://user-images.githubusercontent.com/25299428/222419463-35afd0ab-5c57-4e23-85c4-1f3a77cb30fb.png)
 ### 연관 관계에서 외래키 매핑을 하지 않은 이유
