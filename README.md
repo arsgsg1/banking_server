@@ -37,6 +37,7 @@ reqeust
   "friendId": 1 //친구 추가할 대상 ID
 }
 
+친구 목록
 GET /members/{memberId}/friends
 
 response
